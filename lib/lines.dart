@@ -6,22 +6,19 @@ enum Types { drawLine, drawRec, drawOval }
 
 class Line {
   List<Offset> points;
-  List<Offset> deci;
-  List<Offset> octo;
-  List<Offset> penta;
+  List<Offset> lastTen;
   Color color;
   double size;
   double radius;
   Types type;
+  var numOfPoints = 0;
   bool filled = false;
 
   Line(Types type, Offset point, Color color, double size, radius) {
     this.type = type;
     this.color = color;
     this.points = [point];
-    this.deci = [point];
-    this.octo = [point];
-    this.penta = [point];
+    this.lastTen = [point];
     this.radius = radius;
     this.size = size;
   }
@@ -37,22 +34,23 @@ class Line {
     return Offset(points[index].dx * size / 100, points[index].dy * size / 100);
   }
 
+  Offset last(int index) {
+    if (index == -1) {
+      return Offset(points.last.dx * size / 100, points.last.dy * size / 100);
+    }
+    return Offset(
+        lastTen[index].dx * size / 100, lastTen[index].dy * size / 100);
+  }
+
   void add(Offset offset) {
-    points.add(offset);
+    if (numOfPoints % 5 == 0) {
+      points.add(offset);
+    }
+    if (lastTen.length > 9) {
+      lastTen.remove(0);
+    }
+    lastTen.add(offset);
     print(points.length);
-    if (points.length % 10 == 0) {
-      deci.add(offset);
-      print('added to deci');
-    }
-    if (points.length % 8 == 0) {
-      octo.add(offset);
-      print('added to octo');
-    }
-    if (points.length % 5 == 0) {
-      penta.add(offset);
-      print('added to penta');
-    }
-    print('${points.length} ${deci.length} ${octo.length} ${penta.length}');
   }
 
   void other(Offset offset) {

@@ -134,9 +134,6 @@ class _TeleDrawState extends State<TeleDraw> {
                 var penta = 0;
                 var old = 0;
                 for (var p in points) {
-                  deci += p.deci.length;
-                  octo += p.octo.length;
-                  penta += p.penta.length;
                   old += p.points.length;
                 }
                 print('full: $old\ndeci: $deci\nocto: $octo\npenta: $penta');
@@ -323,9 +320,6 @@ class MyPainter extends CustomPainter {
     for (var line in points) {
       switch (line.type) {
         case Types.drawLine:
-          var deci = line.deci;
-          var octo = line.octo;
-          var penta = line.penta;
           // print('10: ${deci.length} 8: ${octo.length} 5: ${penta.length}');
           for (int i = 0; i < line.length - 1; i++) {
             // canvas.drawCircle(
@@ -333,41 +327,9 @@ class MyPainter extends CustomPainter {
             canvas.drawLine(
                 line.point(i), line.point(i + 1), Paint()..color = Colors.blue);
           }
-          for (int i = 0; i < deci.length - 1; i++) {
-            // canvas.drawCircle(
-            //     Offset(deci[i].dx * line.size, deci[i].dy * line.size),
-            //     line.radius,
-            //     Paint()..color = Colors.black);
-            canvas.drawLine(
-                Offset(
-                    deci[i].dx * line.size / 100, deci[i].dy * line.size / 100),
-                Offset(deci[i + 1].dx * line.size / 100,
-                    deci[i + 1].dy * line.size / 100),
-                Paint()..color = Colors.black);
-          }
-          for (int i = 0; i < octo.length - 1; i++) {
-            // canvas.drawCircle(
-            //     Offset(octo[i].dx * line.size, octo[i].dy * line.size),
-            //     line.radius / 2,
-            //     Paint()..color = Colors.red);
-            canvas.drawLine(
-                Offset(
-                    octo[i].dx * line.size / 100, octo[i].dy * line.size / 100),
-                Offset(octo[i + 1].dx * line.size / 100,
-                    octo[i + 1].dy * line.size / 100),
-                Paint()..color = Colors.red);
-          }
-          for (int i = 0; i < penta.length - 1; i++) {
-            // canvas.drawCircle(
-            //     Offset(penta[i].dx * line.size, penta[i].dy * line.size),
-            //     line.radius / 3,
-            //     Paint()..color = Colors.yellow);
-            canvas.drawLine(
-                Offset(penta[i].dx * line.size / 100,
-                    penta[i].dy * line.size / 100),
-                Offset(penta[i + 1].dx * line.size / 100,
-                    penta[i + 1].dy * line.size / 100),
-                Paint()..color = Colors.yellow);
+          for (int i = 0; i < line.lastTen.length; i++) {
+            canvas.drawCircle(
+                line.last(i), line.radius, Paint()..color = line.color);
           }
           break;
         case Types.drawRec:
